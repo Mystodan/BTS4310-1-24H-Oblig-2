@@ -75,6 +75,8 @@ def mutate_solution_multi(solution:bytearray, mutation_rate:float):
 
 def genetic_algorithm(parents:list[tuple[Knapsack,list[Item]]]):
     """Genetisk algoritme for å løse knapsack problemet"""
+    mut_rat = MUTATION_RATE
+
     # Fase 1 - Bruke Initial algoritme
     løsninger = parents
 
@@ -92,13 +94,17 @@ def genetic_algorithm(parents:list[tuple[Knapsack,list[Item]]]):
 
     ## Konvertere løsninger til binær form
     bin_løsninger:list[bytearray] = []
-    
     for løsning in løsninger:
         bin_løsninger.append(convert_solution_to_binary(outside=løsning[1], inside=løsning[0], original=ITEMS))
     
+    ## Gjør løsninger til foreldre
     parents = bin_løsninger.copy()
+
+
+    ## Genetisk algoritme start
     iterations = 1
     while iterations <= 1000:
+        ## Genererer barn
         children : list[bytearray] = []
         children.extend(parents)
         evals: list[tuple[tuple[Knapsack,list[Item]], tuple[float,float]]] = []
@@ -111,26 +117,25 @@ def genetic_algorithm(parents:list[tuple[Knapsack,list[Item]]]):
             
             ## Mutasjon 
             for child in children:
-                children[children.index(child)] = mutate_solution_multi(child,  0.001)
+                children[children.index(child)] = mutate_solution_multi(child,  mutation_rate=mut_rat)
                 solution = convert_binary_to_solution(child, ITEMS, WEIGHT_CAPACITY, weight_limit_ignore=True)
             ## Evaluering
                 evaluation = best_eval(solution[0], WEIGHT_CAPACITY) 
                 evals.append((solution, evaluation))
        
-  
+        ## Sorterer evalueringer
         sorted_evals = []  
         [sorted_evals.append(eval) for eval in evals if eval[1][1] >= 0.0 and eval not in sorted_evals] # Fjerner negative fitness, vekt over maks kapasitet
         sort_weight = sorted(sorted_evals, key=lambda x: x[1][1]) # Sorterer etter vekt
         sort_value = sorted(sorted_evals, key=lambda x: x[1][0], reverse=True) # Sorterer etter verdi
-        ## Oppdaterer foreldre
-       
+        ## Oppdaterer foreldre og konverterer til binær form
         parents = (
             [convert_solution_to_binary(outside=eval[0][1], inside=eval[0][0], original=ITEMS) for eval in sort_weight[:1]] +
             [convert_solution_to_binary(outside=eval[0][1], inside=eval[0][0], original=ITEMS) for eval in sort_value[:1]]
             )
         ## Oppdaterer mutasjonsrate ved å oppdatere iterasjoner
-
-
+        if iterations % 100 == 0:
+            mut_rat = max(MUTATION_RATE * 0.5, 0.001)
         iterations += 1
     return parents
 
