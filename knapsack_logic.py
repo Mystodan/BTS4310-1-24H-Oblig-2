@@ -1,6 +1,7 @@
+# Beskrivelse: Logikk & Hovedfunksjonalitet for knapsack algoritme
 from dataclasses import dataclass
 from random import random
-from knapsack import *
+from knapsack_class import *
 
 ST = ConstructMethod.SortType # SORT TYPE
 SO = ConstructMethod.SortOrder # SORT ORDER

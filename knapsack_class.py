@@ -1,3 +1,4 @@
+# beskrivelse: Klassen Knapsack og ConstructMethod, samt funksjoner for å generere gjenstander, konvertere løsninger til binær form og evaluere løsninger
 from enum import Enum
 from random import randint
 

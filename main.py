@@ -1,3 +1,4 @@
+# Beskrivelse: Hovedprogram for knapsack problemet, med genetisk algoritme
 from knapsack_class import generate_item_list, print_evaluation_values
 from knapsack_logic import Construct, convert_binary_to_solution, genetic_algorithm
 
