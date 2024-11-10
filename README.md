@@ -35,6 +35,9 @@ class Construct:
 ```
 > Her ser du at Metodene er basert på Stigende/Synkende rekkefølger basert på Verdi/Vekt
 
+Jeg har valgt å implementere alt i for det meste klasser, dette går greit, men for optimaliseringsårsaker hadde jeg nok gjort ting annerledes neste gang.
+> Bl.a. så hadde jeg implementert knapsack annerledes, og hatt en item lookup i stedet, binær liste 1,0 for i knapsack eller ikke, og en annen liste for alle gjenstandene generelt, slik som det allerede er.
+
 ### Kjøre filen
 
 For å kjøre dette scriptet er det bare å bruke denne linjen fra root:
@@ -98,7 +101,16 @@ genererer barn:
         Verdi: 210
         Gjenstander: 14
 ```
+### Resultater i tabell
 
+| Løsning       | Verdi    | Gjenstander    | Vekt    |
+| ------------- | ---------|----            | --      |
+| init metode 1 | 291 NOK  |       19       |   25    |
+| init metode 2 |  81 NOK  |       05       |   25    |
+| init metode 3 | 100 NOK  |       09       |   25    |
+| init metode 4 | 157 NOK  |       08       |   25    |
+| gene metode 1 | 301 NOK  |       19       |   25    |
+| gene metode 2 | 301 NOK  |       19       |   25    |
 
 
 

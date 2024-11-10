@@ -11,7 +11,7 @@ ITEMS = generate_item_list(
     limiter_weight=WEIGHT_LIMITS, 
     max_items=50)
 MUTATION_RATE = 0.001 # Sannsynlighet for mutasjon
-CHILDREN_PAIRS = 50 # Antall barn som skal genereres
+CHILDREN_PAIRS = 100 # Antall barn som skal genereres
 
 
 
