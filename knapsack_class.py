@@ -1,4 +1,5 @@
 # beskrivelse: Klassen Knapsack og ConstructMethod, samt funksjoner for å generere gjenstander, konvertere løsninger til binær form og evaluere løsninger
+from dataclasses import dataclass
 from enum import Enum
 from random import randint
 
@@ -95,6 +96,31 @@ class ConstructMethod():
             if knapsack.weight + item.weight <= knapsack.capacity:
                 knapsack.add_item(item)
         return knapsack, [element for element in self.items if element not in knapsack.items]
+
+
+ST = ConstructMethod.SortType # SORT TYPE
+SO = ConstructMethod.SortOrder # SORT ORDER
+
+@dataclass
+class Construct:
+    """Konstruksjonsmetoder for initial knapsack algoritme"""
+    def method_1(items, capacity):
+        """Konstruerer en knapsack ved å sortere items etter [økende][vekt], og legge til gjenstander i knapsack til kapasiteten er nådd"""
+        return ConstructMethod(items=items, capacity=capacity, sort_type=ST.WEIGHT, sort_order=SO.ASCENDING)
+
+    def method_2(items, capacity):
+        """Konstruerer en knapsack ved å sortere items etter [synkende][vekt], og legge til gjenstander i knapsack til kapasiteten er nådd"""
+        return ConstructMethod(items=items, capacity=capacity, sort_type=ST.WEIGHT, sort_order=SO.DESCENDING)
+
+    def method_3(items, capacity):
+        """Konstruerer en knapsack ved å sortere items etter [økende][verdi], og legge til gjenstander i knapsack til kapasiteten er nådd"""
+        return ConstructMethod(items=items, capacity=capacity, sort_type=ST.VALUE, sort_order=SO.ASCENDING)
+
+    def method_4(items, capacity):
+        """Konstruerer en knapsack ved å sortere items etter [synkende][verdi], og legge til gjenstander i knapsack til kapasiteten er nådd"""
+        return ConstructMethod(items=items, capacity=capacity, sort_type=ST.VALUE, sort_order=SO.DESCENDING)
+
+
 
 def generate_item_list(max_items, limiter_weight:tuple[int,int], limiter_value:tuple[int,int]) -> list[Item]:
     """Genererer en liste med gjenstander\n

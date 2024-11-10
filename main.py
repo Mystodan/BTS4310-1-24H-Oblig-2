@@ -6,7 +6,10 @@ from knapsack_logic import Construct, convert_binary_to_solution, genetic_algori
 VALUE_LIMITS = (10,20) # [min, max] NOK, verdi grenser for gjenstander
 WEIGHT_LIMITS = (1,5) # [min, max] kg, vekt rekkevide generert for gjenstander
 WEIGHT_CAPACITY = 25 # Kapasitet, kg for knapsacken
-ITEMS = generate_item_list(limiter_value=VALUE_LIMITS, limiter_weight=WEIGHT_LIMITS, max_items=50)
+ITEMS = generate_item_list(
+    limiter_value=VALUE_LIMITS, 
+    limiter_weight=WEIGHT_LIMITS, 
+    max_items=50)
 MUTATION_RATE = 0.001 # Sannsynlighet for mutasjon
 CHILDREN_PAIRS = 50 # Antall barn som skal genereres
 
