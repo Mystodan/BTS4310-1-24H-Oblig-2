@@ -73,15 +73,10 @@ def mutate_solution_multi(solution:bytearray, mutation_rate:float):
             solution[i] = 1 if solution[i] == 0 else 0
     return solution
 
-def genetic_algorithm():
+def genetic_algorithm(parents:list[tuple[Knapsack,list[Item]]]):
     """Genetisk algoritme for å løse knapsack problemet"""
     # Fase 1 - Bruke Initial algoritme
-    løsninger =[
-        Construct.method_1(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
-        Construct.method_2(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
-        Construct.method_3(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
-        Construct.method_4(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
-    ]
+    løsninger = parents
 
     # Fase 2 - Optimering med bruk av Genetisk algoritme
     ## Evaluering av løsninger
@@ -105,7 +100,7 @@ def genetic_algorithm():
     iterations = 1
     while iterations <= 1000:
         children : list[bytearray] = []
-    
+        children.extend(parents)
         evals: list[tuple[tuple[Knapsack,list[Item]], tuple[float,float]]] = []
         while len(children) < 100 :
             for i, løsning in enumerate(parents):
@@ -122,41 +117,55 @@ def genetic_algorithm():
                 evaluation = best_eval(solution[0], WEIGHT_CAPACITY) 
                 evals.append((solution, evaluation))
        
-        ## Seleksjon
-                                                 # eval[1][1], første 1 tilsier evalueringen, andre 1 tilsier fitness vekt 
-        sorted_evals =  [eval for eval in evals if eval[1][1] >= 0.0] # Fjerner negative fitness, vekt over maks kapasitet
-        sorted_evals = sorted(sorted_evals, key=lambda x: x[1][1]) # Sorterer etter verdi per vekt
+  
+        sorted_evals = []  
+        [sorted_evals.append(eval) for eval in evals if eval[1][1] >= 0.0 and eval not in sorted_evals] # Fjerner negative fitness, vekt over maks kapasitet
+        sort_weight = sorted(sorted_evals, key=lambda x: x[1][1]) # Sorterer etter vekt
+        sort_value = sorted(sorted_evals, key=lambda x: x[1][0], reverse=True) # Sorterer etter verdi
         ## Oppdaterer foreldre
-        parents = [convert_solution_to_binary(outside=eval[0][1], inside=eval[0][0], original=ITEMS) for eval in sorted_evals[:4]]
+       
+        parents = (
+            [convert_solution_to_binary(outside=eval[0][1], inside=eval[0][0], original=ITEMS) for eval in sort_weight[:1]] +
+            [convert_solution_to_binary(outside=eval[0][1], inside=eval[0][0], original=ITEMS) for eval in sort_value[:1]]
+            )
         ## Oppdaterer mutasjonsrate ved å oppdatere iterasjoner
+
+
         iterations += 1
     return parents
 
 
 
 
-
-
-    
-   
-
-    
-
- 
-        
-            
-            
-
-
-
 if __name__ == "__main__":
-    rack = genetic_algorithm()
-    for parent in rack:
-        solution = convert_binary_to_solution(parent, ITEMS, WEIGHT_CAPACITY, weight_limit_ignore=True)
-        print(f"Verdi per vekt: {best_eval(solution[0], WEIGHT_CAPACITY)[0]}")
-        print(f"Fitness vekt: {best_eval(solution[0], WEIGHT_CAPACITY)[1]}")
-        print(f"Vekt: {sum([item.weight for item in solution[0].items])}")
-        print(f"Verdi: {sum([item.value for item in solution[0].items])}")
-        print(f"Gjenstander: {len(solution[0].items)}")
-        print("")
+    parents = [ # Genererer foreldre
+        Construct.method_1(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
+        Construct.method_2(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
+        Construct.method_3(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
+        Construct.method_4(items=ITEMS, capacity=WEIGHT_CAPACITY).construct(),
+    ]
+    # Evaluering av foreldre
+    print("genererer foreldre:\n")
+    for parent in parents:
+        solution = parent
+        print(f"\tVerdi per vekt: {best_eval(solution[0], WEIGHT_CAPACITY)[0]/sum([item.weight for item in solution[0].items])}")
+        print(f"\tFitness vekt: {best_eval(solution[0], WEIGHT_CAPACITY)[1]}")
+        print(f"\tVekt: {sum([item.weight for item in solution[0].items])}")
+        print(f"\tVerdi: {sum([item.value for item in solution[0].items])}")
+        print(f"\tGjenstander: {len(solution[0].items)}\n")
+
+   
+    # Genetisk algoritme
+    last_gen_children = genetic_algorithm(parents)
+    
+    # Evaluering av barn
+    print("genererer barn:\n")
+    for child in last_gen_children:
+        solution = convert_binary_to_solution(child, ITEMS, WEIGHT_CAPACITY, weight_limit_ignore=True)
+        print(f"\tVerdi per vekt: {best_eval(solution[0], WEIGHT_CAPACITY)[0]/sum([item.weight for item in solution[0].items])}")
+        print(f"\tFitness vekt: {best_eval(solution[0], WEIGHT_CAPACITY)[1]}")
+        print(f"\tVekt: {sum([item.weight for item in solution[0].items])}")
+        print(f"\tVerdi: {sum([item.value for item in solution[0].items])}")
+        print(f"\tGjenstander: {len(solution[0].items)}\n")
+   
  

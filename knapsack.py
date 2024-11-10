@@ -115,18 +115,18 @@ def evaluate_value_weight(solution:Knapsack, capacity:int) -> tuple[float,float]
     """Evaluerer fitnessen til en løsning basert på verdi/vekt\n
     solution: Liste med gjenstander\n
     return: verdi per gjenstand, høyere er bedre"""
-    value_per_weight = sum([item.value for item in solution.items])/sum([item.weight for item in solution.items])
+    value_per_weight = solution.get_item_value_sum()/sum(solution.get_item_weights())
     return value_per_weight, value_per_weight
 
 def best_eval(solution:Knapsack, capacity:int) -> tuple[float,float]:
     """Evaluerer fitnessen til en løsning basert på verdi/vekt og vekt\n
     solution: Liste med gjenstander\n
     return: Tuple med verdi per gjenstand, høyere er bedre og fitness vekt, lavere er bedre, utenom negative tall"""
-    weight_sum = sum([item.weight for item in solution.items])
-    value_per_weight = sum([item.value for item in solution.items])/weight_sum if weight_sum > 0 else sum(solution.get_item_weights())
+    weight_sum = sum(solution.get_item_weights())  
+    if weight_sum > capacity:
+        return 0.0, -1.0
     fitness = 1-sum([item.weight for item in solution.items])/capacity 
-
-    return value_per_weight, fitness 
+    return solution.get_item_value_sum(), fitness 
 
 def evaluate_solutions(evaluation_function,solution:list[tuple[Knapsack, list[Item]]], capacity:int) -> list[float]:
     """Evaluerer en liste med løsninger\n
