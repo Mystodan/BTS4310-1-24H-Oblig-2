@@ -10,6 +10,13 @@ Knapsack 0/1 problemet handler om å maksimere verdien av gjenstander som kan le
 
 > Dette problemet er NP-komplett, noe som betyr at det ikke finnes noen kjent effektiv algoritme for å løse det for alle mulige tilfeller. Derfor brukes ofte heuristiske eller approksimative metoder, som genetiske algoritmer, for å finne gode løsninger innenfor rimelig tid.
 
+### Uakseptable løsninger - Infeasability
+For å løse problemet med uakseptable løsninger (individer med større vekt enn tillatt) i 0/1 Knapsack-problemet, kan du bruke flere strategier:
+
+- Initialisering: Sørg for at den opprinnelige populasjonen består av akseptable løsninger. Dette kan gjøres ved å bruke en grådig algoritme for å konstruere initiale løsninger som respekterer vektbegrensningen.
+
+- Mutasjon og Crossover: Modifiser mutasjons- og crossover-operatørene for å produsere kun akseptable avkom. For eksempel, under crossover, kan du sjekke om avkommet er akseptabelt.
+
 ### Min implementasjon
 Jeg har valgt å implementere alle Metodene nevnt i Nourredine sine forelesninger for å initialiere foreldrene, basert på dette er dette foreldrene som barna arver fra(se __knapsack_class.py__):
 ```py
